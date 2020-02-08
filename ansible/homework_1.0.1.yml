@@ -1,0 +1,56 @@
+---
+
+ - hosts: mass
+   become: yes
+   vars:
+    logrotate_scripts:
+      - name: sys-log 
+        path: /var/log/
+        options:
+          - daily
+          - size 25M
+          - rotate 7
+          - missingok
+          - compress
+          - delaycompress
+          - copytruncate
+
+   roles:
+      - ntp
+      - git
+      - users
+      - logrotate
+
+ - hosts: frontend
+   become: yes
+   vars:
+    logrotate_scripts:
+      - name: nginx-log
+        path: /var/log/nginx/
+        options:
+          - daily
+          - size 25M
+          - rotate 7
+          - missingok
+          - compress
+          - delaycompress
+          - copytruncate
+
+   roles:
+     - nginx  
+     - logrotate
+
+ - hosts: backend
+   become: yes
+   roles: 
+     - pfpm
+
+ - hosts: drone
+   gather_facts: no
+   connection: local
+   tasks:
+      - name: "Up db-database server"
+        command: /home/gri/vagrant/db-backup-run.sh 
+
+   
+...
