@@ -1,0 +1,10 @@
+---
+
+users:
+  - username: lab
+    uid: 1001
+  - username: labsudo
+    uid: 1002
+    groups: ['sudo']
+
+...

@@ -1,0 +1,15 @@
+---
+
+- name: Install EPEL Repo
+  yum:
+      name=epel-release
+      state=present
+
+- name: Install php-fpm 
+  yum:
+      name=php-fpm
+      state=latest
+  notify:
+      - pfpm systemd
+
+...
